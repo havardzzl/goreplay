@@ -229,7 +229,7 @@ func (o *HTTPOutput) sendRequest(client *HTTPClient, msg *Message) {
 	}
 
 	if o.config.TrackResponses {
-		o.responses <- &response{resp, uuid, start.UnixNano(), stop.UnixNano() - start.UnixNano()}
+		o.responses <- &response{resp, uuid, stop.UnixNano() - start.UnixNano(), start.UnixNano()}
 	}
 
 	if o.elasticSearch != nil {

@@ -100,7 +100,7 @@ func TestTokenMiddleware(t *testing.T) {
 	rep := []byte("3 932079936fa4306fc308d67588178d17d823647c 1439818823587396305 200\nHTTP/1.1 200 OK\r\nContent-Length: 15\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n932079936fa4306")
 	count := uint32(0)
 	out := NewTestOutput(func(msg *Message) {
-		if msg.Meta[0] == '1' && !bytes.Equal(payloadID(msg.Meta), payloadID(req)) {
+		if atomic.LoadUint32(&count) == 1 && msg.Meta[0] == '1' && !bytes.Equal(payloadID(msg.Meta), payloadID(req)) {
 			token, _, _ := proto.PathParam(msg.Data, []byte("token"))
 			if !bytes.Equal(token, proto.Body(rep)) {
 				t.Error("expected the token to be equal to the replayed responses's token")
